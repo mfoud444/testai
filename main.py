@@ -10,7 +10,7 @@ app = FastAPI()
 # Load the Keras model
 model_path = os.path.join(os.getcwd(), 'keras_model.h5')
 
-model = load_model(model_path)
+
 
 def preprocess_image(img):
     img = img.resize((224, 224))  
@@ -20,6 +20,7 @@ def preprocess_image(img):
     return img_array
 
 def predict_class(img):
+    model = load_model(model_path)
     processed_image = preprocess_image(img)
     prediction = model.predict(processed_image)
     return prediction
