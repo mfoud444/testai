@@ -10,6 +10,8 @@ app = FastAPI()
 # Load the Keras model
 model_path = os.path.join(os.getcwd(), 'keras_model.h5')
 
+model = load_model(model_path)
+
 def preprocess_image(img):
     img = img.resize((224, 224))  
     img_array = np.array(img)
