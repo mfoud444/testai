@@ -8,7 +8,7 @@ import os
 app = FastAPI()
 
 # Load the Keras model
-model_path = os.path.join(os.getcwd(), 'keras_model.h5')
+model_path = os.path.join(os.getcwd(), 'kk.h5')
 
 
 
