@@ -1,11 +1,25 @@
-FROM python:3.7
-
-WORKDIR /code
-
-COPY ./requirements.txt /code/requirements.txt
-RUN pip install --upgrade pip
-RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
-
-COPY . .
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "7860"]
-# CMD ["uvicorn","-b","0.0.0.0:7860","--timeout","600" ,"app:app"]
+FROM python:3-alpine AS builder
+ 
+WORKDIR /app
+ 
+RUN python3 -m venv venv
+ENV VIRTUAL_ENV=/app/venv
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+ 
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+ 
+# Stage 2
+FROM python:3-alpine AS runner
+ 
+WORKDIR /app
+ 
+COPY --from=builder /app/venv venv
+COPY main.py main.py
+ 
+ENV VIRTUAL_ENV=/app/venv
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+ 
+EXPOSE 8000
+ 
+CMD [ "uvicorn", "--host", "0.0.0.0", "main:app" ]
